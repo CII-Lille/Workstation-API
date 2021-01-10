@@ -3,21 +3,37 @@ import { DataTypes, Model, Optional } from 'sequelize'
 import { sequelize } from '../database'
 
 export interface WorkstationRequestAttributes {
+    /** ID of the WorkstationRequest */
     id: number
+    /** Name of the request sender */
     name: string
+    /** Surname of the request sender */
     surname: string
+    /** Promotion of the request sender */
     promotion: string
+    /** Email of the request sender */
     email: string
+    /** Submission datetime of the request */
     submissionDate: Date
+    /** Deadline datetime of the request */
     deadlineDate: Date
+    /** Environment to use for the project */
     environment: string
+    /** Main langage used in the project */
     langage: string
+    /** Basic description of the project */
     description: string
+    /** Dependencies of the project */
     dependencies: string
+    /** URL that lead to the source of the project */
     sourceUrl: string
+    /** Description of the expected result */
     resultDescription: string
+    /** Instruction to build/run the project */
     insutrctions: string
+    /** Does the project use multithreading ? */
     needMultithreading: boolean
+    /** Does the project need to use the GPU ? */
     needGpu: boolean
 }
 
@@ -26,6 +42,10 @@ export type WorkstationRequestCreationAttribute = Optional<
     'id' | 'submissionDate' | 'deadlineDate' | 'dependencies' | 'needMultithreading' | 'needGpu'
 >
 
+/**
+ * @class WorkstationRequest Model
+ * @abstract Model of a deposited project request to run on the workstation
+ */
 export class WorkstationRequest
     extends Model<WorkstationRequestAttributes, WorkstationRequestCreationAttribute>
     implements WorkstationRequestAttributes {
@@ -51,6 +71,8 @@ export class WorkstationRequest
     public readonly createdAt!: Date
     public readonly updatedAt!: Date
 }
+
+// ---- Initalize ------------------------------------------------------------------------
 
 WorkstationRequest.init(
     {
