@@ -1,4 +1,3 @@
-import { createHash } from 'crypto'
 import { DataTypes, Model, Optional } from 'sequelize'
 
 import { sequelize } from '../database'
@@ -9,22 +8,22 @@ export interface WorkstationRequestAttributes {
     surname: string
     promotion: string
     email: string
-    submission_date: Date
-    deadline_date: Date
+    submissionDate: Date
+    deadlineDate: Date
     environment: string
     langage: string
     description: string
     dependencies: string
-    source_url: string
-    result_description: string
+    sourceUrl: string
+    resultDescription: string
     insutrctions: string
-    need_multithreading: boolean
-    need_gpu: boolean
+    needMultithreading: boolean
+    needGpu: boolean
 }
 
 export type WorkstationRequestCreationAttribute = Optional<
     WorkstationRequestAttributes,
-    'id' | 'submission_date' | 'deadline_date' | 'dependencies' | 'need_multithreading' | 'need_gpu'
+    'id' | 'submissionDate' | 'deadlineDate' | 'dependencies' | 'needMultithreading' | 'needGpu'
 >
 
 export class WorkstationRequest
@@ -36,17 +35,17 @@ export class WorkstationRequest
     public surname!: string
     public promotion!: string
     public email!: string
-    public submission_date!: Date
-    public deadline_date!: Date
+    public submissionDate!: Date
+    public deadlineDate!: Date
     public environment!: string
     public langage!: string
     public description!: string
     public dependencies!: string
-    public source_url!: string
-    public result_description!: string
+    public sourceUrl!: string
+    public resultDescription!: string
     public insutrctions!: string
-    public need_multithreading!: boolean
-    public need_gpu!: boolean
+    public needMultithreading!: boolean
+    public needGpu!: boolean
 
     // Timestamps
     public readonly createdAt!: Date
@@ -58,57 +57,71 @@ WorkstationRequest.init(
         id: {
             type: DataTypes.INTEGER.UNSIGNED,
             autoIncrement: true,
-            primaryKey: true
+            primaryKey: true,
+            allowNull: false
         },
         name: {
-            type: DataTypes.STRING(128)
+            type: DataTypes.STRING(128),
+            allowNull: false
         },
         surname: {
-            type: DataTypes.STRING(128)
+            type: DataTypes.STRING(128),
+            allowNull: false
         },
         promotion: {
-            type: DataTypes.STRING(16)
+            type: DataTypes.STRING(16),
+            allowNull: false
         },
         email: {
-            type: DataTypes.STRING(128)
+            type: DataTypes.STRING(128),
+            allowNull: false
         },
-        submission_date: {
+        submissionDate: {
             type: DataTypes.DATE,
-            defaultValue: () => new Date()
+            defaultValue: () => new Date(),
+            allowNull: false
         },
-        deadline_date: {
+        deadlineDate: {
             type: DataTypes.DATE,
             allowNull: true
         },
         environment: {
-            type: DataTypes.STRING(128)
+            type: DataTypes.STRING(128),
+            allowNull: false
         },
         langage: {
-            type: DataTypes.STRING(64)
+            type: DataTypes.STRING(64),
+            allowNull: false
         },
         description: {
-            type: DataTypes.TEXT
+            type: DataTypes.TEXT,
+            allowNull: false
         },
         dependencies: {
             type: DataTypes.TEXT,
             allowNull: true
         },
-        source_url: {
-            type: DataTypes.STRING(2048)
+        sourceUrl: {
+            type: DataTypes.STRING(2048),
+            allowNull: false
         },
-        result_description: {
-            type: DataTypes.TEXT
+        resultDescription: {
+            type: DataTypes.TEXT,
+            allowNull: false
         },
         insutrctions: {
-            type: DataTypes.TEXT
+            type: DataTypes.TEXT,
+            allowNull: false
         },
-        need_multithreading: {
+        needMultithreading: {
             type: DataTypes.BOOLEAN,
-            defaultValue: false
+            defaultValue: false,
+            allowNull: false
         },
-        need_gpu: {
+        needGpu: {
             type: DataTypes.BOOLEAN,
-            defaultValue: false
+            defaultValue: false,
+            allowNull: false
         }
     },
     {
@@ -116,22 +129,3 @@ WorkstationRequest.init(
         sequelize
     }
 )
-
-// Not relevant, testing token creation after WorkstationRequest creation
-// Goal is to create a reading token link to the request
-// May use associations (https://sequelize.org/master/manual/assocs.html)
-WorkstationRequest.addHook('afterCreate', 'token', (instance) => {
-    const stringifiedInstance = JSON.stringify(instance.toJSON())
-    const secret = process.env.SECRET ?? Math.random().toString(36).substring(2)
-    const random = Math.random().toString(36).substring(2)
-
-    const hash = createHash('sha256')
-
-    hash.update(stringifiedInstance)
-    hash.update(secret)
-    hash.update(random)
-
-    const token = hash.digest('hex')
-
-    console.log(token, token.length, { secret, random })
-})
