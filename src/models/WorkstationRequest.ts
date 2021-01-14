@@ -62,10 +62,10 @@ export class WorkstationRequest
     public environment!: string
     public langage!: string
     public description!: string
-    public dependencies!: string
+    public dependencies: string
     public sourceUrl!: string
     public resultDescription!: string
-    public instruction: string
+    public instruction!: string
     public needMultithreading!: boolean
     public needGpu!: boolean
 
