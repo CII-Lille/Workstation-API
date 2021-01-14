@@ -14,14 +14,14 @@ export interface WorkstationRequestTokenAttributes {
     token: string
 }
 
-export type WorkstationRequestTokenCreationAttribute = Optional<WorkstationRequestTokenAttributes, 'id' | 'token'>
+export type WorkstationRequestTokenCreationAttributes = Optional<WorkstationRequestTokenAttributes, 'id' | 'token'>
 
 /**
  * @class WorkstationRequestToken Model
  * @abstract A token is used to allow a user to access his request data/status on readonly
  */
 export class WorkstationRequestToken
-    extends Model<WorkstationRequestTokenAttributes, WorkstationRequestTokenCreationAttribute>
+    extends Model<WorkstationRequestTokenAttributes, WorkstationRequestTokenCreationAttributes>
     implements WorkstationRequestTokenAttributes {
     // Attributes
     public id!: number

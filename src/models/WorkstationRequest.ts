@@ -39,7 +39,7 @@ export interface WorkstationRequestAttributes {
     needGpu: boolean
 }
 
-export type WorkstationRequestCreationAttribute = Optional<
+export type WorkstationRequestCreationAttributes = Optional<
     WorkstationRequestAttributes,
     'id' | 'submissionDate' | 'deadlineDate' | 'dependencies' | 'needMultithreading' | 'needGpu'
 >
@@ -49,7 +49,7 @@ export type WorkstationRequestCreationAttribute = Optional<
  * @abstract Model of a deposited project request to run on the workstation
  */
 export class WorkstationRequest
-    extends Model<WorkstationRequestAttributes, WorkstationRequestCreationAttribute>
+    extends Model<WorkstationRequestAttributes, WorkstationRequestCreationAttributes>
     implements WorkstationRequestAttributes {
     // Attributes
     public id!: number
@@ -169,18 +169,18 @@ WorkstationRequest.init(
 // ---- Hooks ----------------------------------------------------------------------------
 
 // Set and register status
-WorkstationRequest.addHook('afterSave', async (instance) => {
+WorkstationRequest.addHook('afterSave', async (requestInstance) => {
     const status = new WorkstationRequestStatus({
-        requestId: instance.getDataValue('id')
+        requestId: requestInstance.getDataValue('id')
     })
 
     await status.save()
 })
 
 // Create and register token
-WorkstationRequest.addHook('afterSave', async (instance) => {
+WorkstationRequest.addHook('afterSave', async (requestInstance) => {
     const token = new WorkstationRequestToken({
-        requestId: instance.getDataValue('id')
+        requestId: requestInstance.getDataValue('id')
     })
 
     await token.save()
