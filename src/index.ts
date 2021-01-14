@@ -37,7 +37,7 @@ app.listen(app.get('port'), () => {
                 - VTK 8.2.0`,
                 sourceUrl: 'https://github.com/Xisabla/AtilaCalculatorSoftware',
                 resultDescription: 'Executable file "AtilaCalculatorSoftware"',
-                insutrctions: `Run the following commands:
+                instruction: `Run the following commands:
                 - mkdir build && cd build
                 - cmake ../
                 - make

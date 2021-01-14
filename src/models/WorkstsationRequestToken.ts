@@ -45,6 +45,7 @@ WorkstationRequestToken.init(
         },
         requestId: {
             type: DataTypes.INTEGER.UNSIGNED,
+            // Note: may not be unique in the end. However, if it stills unique, remove "id" field
             unique: true,
             allowNull: false
         },

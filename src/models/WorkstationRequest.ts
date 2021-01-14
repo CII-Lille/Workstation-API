@@ -32,7 +32,7 @@ export interface WorkstationRequestAttributes {
     /** Description of the expected result */
     resultDescription: string
     /** Instruction to build/run the project */
-    insutrctions: string
+    instruction: string
     /** Does the project use multithreading ? */
     needMultithreading: boolean
     /** Does the project need to use the GPU ? */
@@ -58,14 +58,14 @@ export class WorkstationRequest
     public promotion!: string
     public email!: string
     public submissionDate!: Date
-    public deadlineDate!: Date
+    public deadlineDate: Date
     public environment!: string
     public langage!: string
     public description!: string
     public dependencies!: string
     public sourceUrl!: string
     public resultDescription!: string
-    public insutrctions!: string
+    public instruction: string
     public needMultithreading!: boolean
     public needGpu!: boolean
 
@@ -77,8 +77,8 @@ export class WorkstationRequest
     public getStatus!: HasOneGetAssociationMixin<WorkstationRequestStatus>
     public getToken!: HasOneGetAssociationMixin<WorkstationRequestToken>
 
-    public readonly status?: WorkstationRequestStatus
-    public readonly token?: WorkstationRequestToken
+    public readonly status: WorkstationRequestStatus
+    public readonly token: WorkstationRequestToken
 
     public static associations: {
         status: Association<WorkstationRequest, WorkstationRequestStatus>
@@ -145,7 +145,7 @@ WorkstationRequest.init(
             type: DataTypes.TEXT,
             allowNull: false
         },
-        insutrctions: {
+        instruction: {
             type: DataTypes.TEXT,
             allowNull: false
         },
