@@ -1,6 +1,8 @@
-import { DataTypes, Model, Optional } from 'sequelize'
+import { Association, DataTypes, HasOneGetAssociationMixin, Model, Optional } from 'sequelize'
 
 import { sequelize } from '../database'
+import { WorkstationRequestStatus } from './WorkstsationRequestStatus'
+import { WorkstationRequestToken } from './WorkstsationRequestToken'
 
 export interface WorkstationRequestAttributes {
     /** ID of the WorkstationRequest */
@@ -70,6 +72,18 @@ export class WorkstationRequest
     // Timestamps
     public readonly createdAt!: Date
     public readonly updatedAt!: Date
+
+    // Associations
+    public getStatus!: HasOneGetAssociationMixin<WorkstationRequestStatus>
+    public getToken!: HasOneGetAssociationMixin<WorkstationRequestToken>
+
+    public readonly status?: WorkstationRequestStatus
+    public readonly token?: WorkstationRequestToken
+
+    public static associations: {
+        status: Association<WorkstationRequest, WorkstationRequestStatus>
+        token: Association<WorkstationRequest, WorkstationRequestToken>
+    }
 }
 
 // ---- Initalize ------------------------------------------------------------------------
@@ -151,3 +165,28 @@ WorkstationRequest.init(
         sequelize
     }
 )
+
+// ---- Hooks ----------------------------------------------------------------------------
+
+// Set and register status
+WorkstationRequest.addHook('afterSave', async (instance) => {
+    const status = new WorkstationRequestStatus({
+        requestId: instance.getDataValue('id')
+    })
+
+    await status.save()
+})
+
+// Create and register token
+WorkstationRequest.addHook('afterSave', async (instance) => {
+    const token = new WorkstationRequestToken({
+        requestId: instance.getDataValue('id')
+    })
+
+    await token.save()
+})
+
+// ---- Associations ---------------------------------------------------------------------
+
+WorkstationRequest.hasOne(WorkstationRequestStatus, { foreignKey: 'requestId', onDelete: 'cascade', as: 'status' })
+WorkstationRequest.hasOne(WorkstationRequestToken, { foreignKey: 'requestId', onDelete: 'cascade', as: 'token' })

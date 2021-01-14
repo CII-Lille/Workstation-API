@@ -75,7 +75,3 @@ WorkstationRequestToken.addHook('beforeValidate', async (instance) => {
         return Promise.reject(new ValidationError(`Request entry for id n°${instance.getDataValue('requestId')} doesn't exist`))
     }
 })
-
-// ---- Associations ---------------------------------------------------------------------
-
-WorkstationRequestToken.belongsTo(WorkstationRequest, { foreignKey: 'requestId' })
